@@ -1,0 +1,7 @@
+{
+  "name": "casino_bet",
+  "version": "0.0.1",
+  "devDependencies": {
+    "standard": "^8.6.0"
+  }
+}
