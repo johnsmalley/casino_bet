@@ -9,11 +9,11 @@ describe('Blackjack', function () {
 
   describe('Sorted Deck', function () {
     it('Sorted deck should contain 1 deck', function () {
-      var createDecks = require('./blackjack.js').createDecks
-      var generatedDeck = createDecks(1)
-      var viewedDeck = {}
+      var createShoe = require('./blackjack.js').createShoe
+      var generatedShoe = createShoe(1)
+      var viewedShoe = {}
       const COUNT = 1
-      var expectDeck = {
+      var expectShoe = {
         '2C': COUNT,
         '3C': COUNT,
         '4C': COUNT,
@@ -68,23 +68,23 @@ describe('Blackjack', function () {
         'AH': COUNT
       }
 
-      generatedDeck.forEach(function (card) {
-        if (viewedDeck[card]) {
-          viewedDeck[card]++
+      generatedShoe.forEach(function (card) {
+        if (viewedShoe[card]) {
+          viewedShoe[card]++
         } else {
-          viewedDeck[card] = 1
+          viewedShoe[card] = 1
         }
       })
 
-      expect(viewedDeck).to.deep.equal(expectDeck)
+      expect(viewedShoe).to.deep.equal(expectShoe)
     })
 
     it('Sorted deck should contain 5 deck', function () {
-      var createDecks = require('./blackjack.js').createDecks
-      var generatedDeck = createDecks(5)
-      var viewedDeck = {}
+      var createShoe = require('./blackjack.js').createShoe
+      var generatedShoe = createShoe(5)
+      var vie = {}
       const COUNT = 5
-      var expectDeck = {
+      var expectShoe = {
         '2C': COUNT,
         '3C': COUNT,
         '4C': COUNT,
@@ -139,23 +139,23 @@ describe('Blackjack', function () {
         'AH': COUNT
       }
 
-      generatedDeck.forEach(function (card) {
-        if (viewedDeck[card]) {
-          viewedDeck[card]++
+      generatedShoe.forEach(function (card) {
+        if (vie[card]) {
+          vie[card]++
         } else {
-          viewedDeck[card] = 1
+          vie[card] = 1
         }
       })
 
-      expect(viewedDeck).to.deep.equal(expectDeck)
+      expect(vie).to.deep.equal(expectShoe)
     })
 
     it('Sorted deck should contain 6 deck', function () {
-      var createDecks = require('./blackjack.js').createDecks
-      var generatedDeck = createDecks(6)
-      var viewedDeck = {}
+      var createShoe = require('./blackjack.js').createShoe
+      var generatedShoe = createShoe(6)
+      var vie = {}
       const COUNT = 6
-      var expectDeck = {
+      var expectShoe = {
         '2C': COUNT,
         '3C': COUNT,
         '4C': COUNT,
@@ -210,24 +210,24 @@ describe('Blackjack', function () {
         'AH': COUNT
       }
 
-      generatedDeck.forEach(function (card) {
-        if (viewedDeck[card]) {
-          viewedDeck[card]++
+      generatedShoe.forEach(function (card) {
+        if (vie[card]) {
+          vie[card]++
         } else {
-          viewedDeck[card] = 1
+          vie[card] = 1
         }
       })
 
-      expect(viewedDeck).to.deep.equal(expectDeck)
+      expect(vie).to.deep.equal(expectShoe)
     })
 
-    it('should shuffle deck and return an array equal to input length', function () {
-      var shuffleDecks = require('./blackjack.js').shuffleDecks
+    it('should shuffle shoe and return an array equal to input length', function () {
+      var shuffleShoe = require('./blackjack.js').shuffleShoe
       var insertArray = [1, 2, 3, 4, 5]
 
-      var tempSuffleDecks = shuffleDecks(insertArray)
-      expect(tempSuffleDecks).to.be.a('array')
-      expect(tempSuffleDecks.length).to.equal(insertArray.length)
+      var tempSuffleShoe = shuffleShoe(insertArray)
+      expect(tempSuffleShoe).to.be.a('array')
+      expect(tempSuffleShoe.length).to.equal(insertArray.length)
     })
   })
 })
