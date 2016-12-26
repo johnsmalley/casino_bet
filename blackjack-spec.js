@@ -9,8 +9,8 @@ describe('Blackjack', function () {
 
   describe('Sorted Deck', function () {
     it('Sorted deck should contain 1 deck', function () {
-      var createShoe = require('./blackjack.js').createShoe
-      var generatedShoe = createShoe(1)
+      var Blackjack = require('./blackjack.js').Blackjack
+      var game = new Blackjack(1)
       var viewedShoe = {}
       const COUNT = 1
       var expectShoe = {
@@ -68,7 +68,7 @@ describe('Blackjack', function () {
         'AH': COUNT
       }
 
-      generatedShoe.forEach(function (card) {
+      game.shoe.forEach(function (card) {
         if (viewedShoe[card]) {
           viewedShoe[card]++
         } else {
@@ -80,9 +80,9 @@ describe('Blackjack', function () {
     })
 
     it('Sorted deck should contain 5 deck', function () {
-      var createShoe = require('./blackjack.js').createShoe
-      var generatedShoe = createShoe(5)
-      var vie = {}
+      var Blackjack = require('./blackjack.js').Blackjack
+      var game = new Blackjack(5)
+      var viewedShoe = {}
       const COUNT = 5
       var expectShoe = {
         '2C': COUNT,
@@ -139,21 +139,21 @@ describe('Blackjack', function () {
         'AH': COUNT
       }
 
-      generatedShoe.forEach(function (card) {
-        if (vie[card]) {
-          vie[card]++
+      game.shoe.forEach(function (card) {
+        if (viewedShoe[card]) {
+          viewedShoe[card]++
         } else {
-          vie[card] = 1
+          viewedShoe[card] = 1
         }
       })
 
-      expect(vie).to.deep.equal(expectShoe)
+      expect(viewedShoe).to.deep.equal(expectShoe)
     })
 
     it('Sorted deck should contain 6 deck', function () {
-      var createShoe = require('./blackjack.js').createShoe
-      var generatedShoe = createShoe(6)
-      var vie = {}
+      var Blackjack = require('./blackjack.js').Blackjack
+      var game = new Blackjack(6)
+      var viewedShoe = {}
       const COUNT = 6
       var expectShoe = {
         '2C': COUNT,
@@ -210,25 +210,34 @@ describe('Blackjack', function () {
         'AH': COUNT
       }
 
-      generatedShoe.forEach(function (card) {
-        if (vie[card]) {
-          vie[card]++
+      game.shoe.forEach(function (card) {
+        if (viewedShoe[card]) {
+          viewedShoe[card]++
         } else {
-          vie[card] = 1
+          viewedShoe[card] = 1
         }
       })
 
-      expect(vie).to.deep.equal(expectShoe)
+      expect(viewedShoe).to.deep.equal(expectShoe)
     })
 
+    // need to explore being able to test the randomness of the shuffle with stats
     it('should shuffle shoe and return an array equal to input length', function () {
-      var shuffleShoe = require('./blackjack.js').shuffleShoe
+      var Blackjack = require('./blackjack.js').Blackjack
+      var game = new Blackjack(1)
       var insertArray = [1, 2, 3, 4, 5]
 
-      var tempSuffleShoe = shuffleShoe(insertArray)
+      var tempSuffleShoe = game.shuffleShoe(insertArray)
       expect(tempSuffleShoe).to.be.a('array')
       expect(tempSuffleShoe.length).to.equal(insertArray.length)
     })
+
+    // test that cards are dealt correctly
+    // xit('should deal the cards from the show', function () {
+    //   var createShoe = require('./blackjack.js').createShoe
+    //   var generatedShoe = createShoe(1)
+    //   var dealCards = require('./blackjack.js').dealCards
+    // }
   })
 })
 
