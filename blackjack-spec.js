@@ -1,5 +1,6 @@
 /* global describe it */
 var expect = require('chai').expect
+var sinon = require('sinon')
 
 describe('Blackjack', function () {
   it('should exist', function () {
@@ -7,8 +8,8 @@ describe('Blackjack', function () {
     expect(Blackjack).to.not.be.undefined
   })
 
-  describe('Sorted Deck', function () {
-    it('Sorted deck should contain 1 deck', function () {
+  describe('Shoe', function () {
+    it('should contain 1 deck', function () {
       var Blackjack = require('./blackjack.js').Blackjack
       var game = new Blackjack(1)
       var viewedShoe = {}
@@ -79,7 +80,7 @@ describe('Blackjack', function () {
       expect(viewedShoe).to.deep.equal(expectShoe)
     })
 
-    it('Sorted deck should contain 5 deck', function () {
+    it('shoe should contain 5 deck', function () {
       var Blackjack = require('./blackjack.js').Blackjack
       var game = new Blackjack(5)
       var viewedShoe = {}
@@ -150,7 +151,7 @@ describe('Blackjack', function () {
       expect(viewedShoe).to.deep.equal(expectShoe)
     })
 
-    it('Sorted deck should contain 6 deck', function () {
+    it('shoe should contain 6 deck', function () {
       var Blackjack = require('./blackjack.js').Blackjack
       var game = new Blackjack(6)
       var viewedShoe = {}
@@ -220,8 +221,11 @@ describe('Blackjack', function () {
 
       expect(viewedShoe).to.deep.equal(expectShoe)
     })
+  })
 
+  describe('Shuffle Shoe', function () {
     // need to explore being able to test the randomness of the shuffle with stats
+    // TODO come up with a better test method
     it('should shuffle shoe and return an array equal to input length', function () {
       var Blackjack = require('./blackjack.js').Blackjack
       var game = new Blackjack(1)
@@ -231,13 +235,71 @@ describe('Blackjack', function () {
       expect(tempSuffleShoe).to.be.a('array')
       expect(tempSuffleShoe.length).to.equal(insertArray.length)
     })
+  })
 
+  describe('Deal Cards', function () {
     // test that cards are dealt correctly
-    // xit('should deal the cards from the show', function () {
-    //   var createShoe = require('./blackjack.js').createShoe
-    //   var generatedShoe = createShoe(1)
-    //   var dealCards = require('./blackjack.js').dealCards
-    // }
+    it('should deal the cards from the shoe', function () {
+      var Blackjack = require('./blackjack.js').Blackjack
+      var game = new Blackjack(1)
+
+      // before deal, lets pretend both dealer and player hands have 3 cards
+      // each so we are confident that there hands are cleared before the
+      // next deal. Also, only 20 cards have been dealt so far
+      game.dealerHand.length = 3
+      game.playerHand.length = 3
+      game.shoeIndex = 20
+
+      // when deal is executed
+      game.dealCards()
+
+      // then the player and dealer should both have 2 cards
+      expect(game.playerHand).to.have.length(2)
+      expect(game.dealerHand).to.have.length(2)
+
+      // then shuffleShoe
+
+      // shoe index should now be at 4
+      expect(game.shoeIndex).to.be.equal(24)
+    })
+
+    // If more than 70% of the deck has been dealt, then reshuffle
+    it('should reshuffle if more than 70% of deck is used', function () {
+      var Blackjack = require('./blackjack.js').Blackjack
+      var game = new Blackjack(1)
+      var shuffleShoeSpy = sinon.spy(game, 'shuffleShoe')
+      var shoeBeforeDeal = game.shoe.slice()
+
+      // before deal, let's pretend that over 70% of the deck has already been
+      // shuffled
+      game.shoeIndex = Math.ceil(game.shoe.length * 0.71)
+
+      // when deal is executed
+      game.dealCards()
+
+      // then shuffleShoe should be called on the shoe
+      expect(shuffleShoeSpy.calledWith(shoeBeforeDeal)).to.be.true
+    })
+  })
+
+  describe('Is Blackjack', function () {
+    // test isBlackJack can determine if a hand contains a blackjack
+    it('should determine if a hand contains a blackjack', function () {
+      var Blackjack = require('./blackjack.js').Blackjack
+      var game = new Blackjack()
+
+      // when a hand contains a blackjack
+      var blackJackHand = ['JC', 'AC']
+
+      // then isBlackJack should return true for hand
+      expect(game.isBlackJack(blackJackHand)).to.be.true
+
+      // when a hand does not contain a blackjack
+      var nonBlackJackHand = ['JC', 'QC']
+
+      // then isBlackJack should return false for hand
+      expect(game.isBlackJack(nonBlackJackHand)).to.be.false
+    })
   })
 })
 

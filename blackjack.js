@@ -1,19 +1,13 @@
-
-// deal cards when starting a new hand
-var dealCards = function (shoe, index) {
-  var dealerHand = []
-  var playerHand = []
-}
-
-// Play a single hand of blackjack
-var playHand = function (shoe, index, bet) {
-
-}
-
 // Game of blackjack
 class Blackjack {
-  constructor (numOfDecks) {
-    this.shoe = this.createShoe(numOfDecks)
+  constructor (numOfDecks = 6, startingMoney, defaultBet) {
+    // starts the game with a shuffle deck
+    this.shoe = this.shuffleShoe(this.createShoe(numOfDecks))
+    this.shoeIndex = 0 // position of next card drawn from show
+    this.dealerHand = []
+    this.playerHand = []
+    this.playerMoney = startingMoney
+    this.defaultBet = defaultBet
   }
 
   // creates a deck(s) with an input of how many decks to use
@@ -42,7 +36,53 @@ class Blackjack {
 
     return shoeCopy
   }
+
+  // deal cards when starting a new hand
+  dealCards () {
+    // resets players hands
+    this.playerHand = []
+    this.dealerHand = []
+
+    // check it shoe needs to be reshuffled
+    if (this.shoeIndex >= 0.7 * this.shoe.length) {
+      // if reshuffle is required then reshuffle and reset the show index
+      this.shoe = this.shuffleShoe(this.shoe)
+      this.shoeIndex = 0
+    }
+
+    // deal cards one at a time starting at the player
+    this.playerHand.push(this.shoe[this.shoeIndex])
+    this.shoeIndex++
+    this.dealerHand.push(this.shoe[this.shoeIndex])
+    this.shoeIndex++
+    this.playerHand.push(this.shoe[this.shoeIndex])
+    this.shoeIndex++
+    this.dealerHand.push(this.shoe[this.shoeIndex])
+    this.shoeIndex++
+  }
+
+  // play black jack
+  playGame () {
+    // if balance is remaining play hand
+      // if first game or last game was won, then do default bet, else double
+      // the last lost
+
+      // check if player has a black jack
+        // if dealer has a black jack, then it's a tie
+        // else player wins
+
+      // check if dealer has a black jack
+        // player loses
+
+      // have player play hand based on dealers hand
+
+  }
+
+  isBlackJack (hand) {
+    
+  }
+  
+  
 }
 
 exports.Blackjack = Blackjack
-exports.dealCards = dealCards

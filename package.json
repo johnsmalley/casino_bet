@@ -2,6 +2,8 @@
   "name": "casino_bet",
   "version": "0.0.1",
   "devDependencies": {
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.7",
     "standard": "^8.6.0"
   }
 }
