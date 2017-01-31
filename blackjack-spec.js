@@ -70,10 +70,10 @@ describe('Blackjack', function () {
       }
 
       game.shoe.forEach(function (card) {
-        if (viewedShoe[card]) {
-          viewedShoe[card]++
+        if (viewedShoe[card[0]]) {
+          viewedShoe[card[0]]++
         } else {
-          viewedShoe[card] = 1
+          viewedShoe[card[0]] = 1
         }
       })
 
@@ -141,10 +141,10 @@ describe('Blackjack', function () {
       }
 
       game.shoe.forEach(function (card) {
-        if (viewedShoe[card]) {
-          viewedShoe[card]++
+        if (viewedShoe[card[0]]) {
+          viewedShoe[card[0]]++
         } else {
-          viewedShoe[card] = 1
+          viewedShoe[card[0]] = 1
         }
       })
 
@@ -212,10 +212,10 @@ describe('Blackjack', function () {
       }
 
       game.shoe.forEach(function (card) {
-        if (viewedShoe[card]) {
-          viewedShoe[card]++
+        if (viewedShoe[card[0]]) {
+          viewedShoe[card[0]]++
         } else {
-          viewedShoe[card] = 1
+          viewedShoe[card[0]] = 1
         }
       })
 
@@ -289,13 +289,13 @@ describe('Blackjack', function () {
       var game = new Blackjack()
 
       // when a hand contains a blackjack
-      var blackJackHand = ['JC', 'AC']
+      var blackJackHand = [['JC', 10], ['AC', 11]]
 
       // then isBlackJack should return true for hand
       expect(game.isBlackJack(blackJackHand)).to.be.true
 
       // when a hand does not contain a blackjack
-      var nonBlackJackHand = ['JC', 'QC']
+      var nonBlackJackHand = [['JC', 10], ['QC', 10]]
 
       // then isBlackJack should return false for hand
       expect(game.isBlackJack(nonBlackJackHand)).to.be.false
