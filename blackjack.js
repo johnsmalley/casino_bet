@@ -1,6 +1,6 @@
 // Game of blackjack
 class Blackjack {
-  constructor (numOfDecks = 6, startingMoney, defaultBet, playLimit = 100) {
+  constructor (startingBalance, defaultBet, numOfDecks = 6,playLimit = 100) {
     // starts the game with a shuffle deck
     this.shoe = this.shuffleShoe(this.createShoe(numOfDecks))
     this.shoeIndex = 0 // position of next card drawn from show
@@ -8,8 +8,10 @@ class Blackjack {
     this.dealerCount = 0
     this.playerHand = []
     this.playerCount = 0
-    this.playerMoney = startingMoney
+    this.balance = startingBalance
+    this.maxBalance = startingBalance
     this.defaultBet = defaultBet
+    this.bet
     this.playLimit = playLimit
   }
 
@@ -73,41 +75,59 @@ class Blackjack {
   // play black jack
   playGame () {
     // if balance is remaining play hand
-    while (this.playerMoney > 0 && this.playLimit > 0) {
+    while (this.balance > 0 && this.playLimit > 0) {
       this.playLimit--
-      // if first game or last game was won, then do default bet, else double
-      // the last lost
 
-      // check if player has a black jack
-        // if dealer has a black jack, then it's a tie
-        // else player wins
+      // deal cards
+      this.dealCards()
+
+      this.playRound()
+    }
+  }
+
+  playRound () {
+    // / bet will be the difference between maximum and current balance
+      // plus an additional default bet
+    if (this.balance > this.maxBalance) {
+      this.maxBalance = this.balance
+    }
+    var bet = this.maxBalance - this.balance + this.defaultBet
+
+      // deal cards
+
+
+      // check if player has a blackjack
+    if (this.isBlackjack(this.playerHand)) {
+        // if the dealer also has a blackjack it's a tie
+      if (this.isBlackjack(this.dealerHand)) {
+        return
+      } else {
+          // but if dealer doesn't have a blackjack, then the player wins
+        this.balance += (bet * 1.5)
+        return
+      }
+    }
+
+      // if the dealer has a blackjack
 
       // check if dealer has a black jack
         // player loses
 
       // have player play hand based on dealers hand
-    }
-
   }
 
-  isBlackJack (hand) {
+  isBlackjack (hand) {
     // hand would contain 2 cards that total 21 to be a blackjack
     if (hand.length !== 2) {
       return false
     }
-    
-    var count = 0
-    hand.forEach(function(card) {
-      count += card[1]
-    })
-    
-    if (count === 21) {
+
+    if (hand[0][1] + hand[1][1] === 21) {
       return true
     } else {
       return false
     }
   }
-
 
 }
 

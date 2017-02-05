@@ -11,7 +11,10 @@ describe('Blackjack', function () {
   describe('Shoe', function () {
     it('should contain 1 deck', function () {
       var Blackjack = require('./blackjack.js').Blackjack
-      var game = new Blackjack(1)
+      var startingBalance = 100
+      var bet = 10
+      var decks = 1
+      var game = new Blackjack(startingBalance, bet, decks)
       var viewedShoe = {}
       const COUNT = 1
       var expectShoe = {
@@ -82,7 +85,10 @@ describe('Blackjack', function () {
 
     it('shoe should contain 5 deck', function () {
       var Blackjack = require('./blackjack.js').Blackjack
-      var game = new Blackjack(5)
+      var startingBalance = 100
+      var bet = 10
+      var decks = 5
+      var game = new Blackjack(startingBalance, bet, decks)
       var viewedShoe = {}
       const COUNT = 5
       var expectShoe = {
@@ -153,7 +159,10 @@ describe('Blackjack', function () {
 
     it('shoe should contain 6 deck', function () {
       var Blackjack = require('./blackjack.js').Blackjack
-      var game = new Blackjack(6)
+      var startingBalance = 100
+      var bet = 10
+      var decks = 6
+      var game = new Blackjack(startingBalance, bet, decks)
       var viewedShoe = {}
       const COUNT = 6
       var expectShoe = {
@@ -289,16 +298,38 @@ describe('Blackjack', function () {
       var game = new Blackjack()
 
       // when a hand contains a blackjack
-      var blackJackHand = [['JC', 10], ['AC', 11]]
+      var blackjackHand = [['JC', 10], ['AC', 11]]
 
       // then isBlackJack should return true for hand
-      expect(game.isBlackJack(blackJackHand)).to.be.true
+      expect(game.isBlackjack(blackjackHand)).to.be.true
 
       // when a hand does not contain a blackjack
-      var nonBlackJackHand = [['JC', 10], ['QC', 10]]
+      var nonBlackjackHand = [['JC', 10], ['QC', 10]]
 
       // then isBlackJack should return false for hand
-      expect(game.isBlackJack(nonBlackJackHand)).to.be.false
+      expect(game.isBlackjack(nonBlackjackHand)).to.be.false
+    })
+  })
+
+  describe('Play Round', function () {
+    it('should payout ', function () {
+      var Blackjack = require('./blackjack.js').Blackjack
+      var startingBalance = 100
+      var defaultBet = 10
+      var game = new Blackjack(startingBalance, defaultBet)
+      // when the player has a blackjack
+      game.playerHand = [['JC', 10], ['AC', 11]]
+
+      // when the dealer does not have a blackjack
+      game.dealerHand = [['JC', 10], ['QC', 10]]
+
+      // when playRound is called
+      game.playRound()
+
+      // then player balance should increase by
+      expect(game.balance).to.equal(startingBalance += defaultBet * 1.5)
+
+
     })
   })
 })
