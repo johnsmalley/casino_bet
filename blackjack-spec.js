@@ -312,11 +312,16 @@ describe('Blackjack', function () {
   })
 
   describe('Play Round', function () {
-    it('should payout ', function () {
+    var game
+
+    beforeEach(function() {
       var Blackjack = require('./blackjack.js').Blackjack
       var startingBalance = 100
       var defaultBet = 10
-      var game = new Blackjack(startingBalance, defaultBet)
+      game = new Blackjack(startingBalance, defaultBet)
+    })
+
+    it('should payout 1.5 times for blackjack', function () {
       // when the player has a blackjack
       game.playerHand = [['JC', 10], ['AC', 11]]
 
@@ -327,9 +332,115 @@ describe('Blackjack', function () {
       game.playRound()
 
       // then player balance should increase by
-      expect(game.balance).to.equal(startingBalance += defaultBet * 1.5)
+      expect(game.balance).to.equal(game.maxBalance += game.defaultBet * 1.5)
 
+    })
 
+    it('should tie if both player and dealer have blackjack', function () {
+      // when the player has a blackjack
+      game.playerHand = [['JC', 10], ['AC', 11]]
+
+      // when the dealer has a blackjack
+      game.dealerHand = [['JS', 10], ['AS', 11]]
+
+      // when playRound is called
+      game.playRound()
+
+      // then player balance should remain the same
+      expect(game.balance).to.equal(game.maxBalance)
+
+    })
+
+    it('should player lose if dealer has blackjack', function () {
+      // when the player does not have a blackjack
+      game.playerHand = [['JC', 10], ['KC', 10]]
+
+      // when the dealer has a blackjack
+      game.dealerHand = [['JS', 10], ['AS', 11]]
+
+      // when playRound is called
+      game.playRound()
+
+      // then player balance should decrease by bet amount
+      expect(game.balance).to.equal(game.maxBalance - game.defaultBet)
+    })
+
+    it ('should calculate bet amout', function () {
+      // when the hands were dealt so player would lose
+      game.playerHand = [['JC', 10], ['KC', 10]]
+      game.dealerHand = [['JS', 10], ['AS', 11]]
+
+      // when a playRound is called
+      game.playRound()
+
+      // then player balance should decrease by bet amount
+      expect(game.maxBalance - game.balance).to.equal(game.defaultBet)
+
+      // previous lost is captured
+      var previousLost = game.maxBalance - game.balance
+
+      // balance before round captured
+      var balanceBeforeRound = game.balance
+
+      // when the next round is dealt so the player would lose
+      game.playerHand = [['JC', 10], ['KC', 10]]
+      game.dealerHand = [['JS', 10], ['AS', 11]]
+
+      // when a playRound is called
+      game.playRound()
+
+      // the player balance should be down by the first bet amount plus a bet
+      // amount equal to the difference between maxBalance and current balance
+      // plus the default bet amount
+      expect(game.maxBalance - game.balance).to.equal(
+        previousLost + game.maxBalance - balanceBeforeRound + game.defaultBet
+      )
+
+    })
+
+    it ('should recalculate max balance', function () {
+      // before playing grab starting balance
+      startingBalance = game.balance
+
+      // when the hands were dealt so player would win a blackjack
+      game.playerHand = [['JC', 10], ['AC', 11]]
+      game.dealerHand = [['JS', 10], ['KS', 10]]
+
+      // before the round is played the maxBalance should equal the start amount
+      expect(game.maxBalance).to.equal(game.balance)
+
+      // when a playRound is called
+      game.playRound()
+
+      // the balance should increase as the player won
+      expect(game.balance).to.equal(startingBalance + (game.defaultBet * 1.5))
+
+      // when the hands were dealt so player would lose
+      game.playerHand = [['JC', 10], ['KC', 10]]
+      game.dealerHand = [['JS', 10], ['AS', 11]]
+
+      // when a playRound is called
+      game.playRound()
+
+      // the maxBlance should be recalculated
+      expect(game.maxBalance).to.equal(
+        startingBalance + (game.defaultBet * 1.5)
+      )
+
+      // when the hands were dealt so the player would tie
+      game.playerHand = [['JC', 10], ['AC', 11]]
+      game.dealerHand = [['JS', 10], ['AS', 11]]
+
+      // when a playRound is called
+      game.playRound()
+
+      // should remain the same
+      expect(game.maxBalance).to.equal(
+        startingBalance + (game.defaultBet * 1.5)
+      )
+
+      // and the actual balance should be below the max balance
+      expect(game.balance).to.be.below(game.maxBalance)
     })
   })
 })

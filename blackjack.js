@@ -87,23 +87,32 @@ class Blackjack {
 
   playRound () {
     // / bet will be the difference between maximum and current balance
-      // plus an additional default bet
+    // plus an additional default bet
     if (this.balance > this.maxBalance) {
       this.maxBalance = this.balance
     }
     var bet = this.maxBalance - this.balance + this.defaultBet
+    // if player doesn't have enough balance for the bet, then just bet the
+    // rest of the balance
+    if (bet <= this.balance) {
+      this.balance -= bet
+    } else {
+      bet = this.balance
+      this.balance = 0
+    }
 
       // deal cards
 
 
       // check if player has a blackjack
     if (this.isBlackjack(this.playerHand)) {
-        // if the dealer also has a blackjack it's a tie
       if (this.isBlackjack(this.dealerHand)) {
+        // if the dealer also has a blackjack then it's tie
+        this.balance += bet
         return
       } else {
           // but if dealer doesn't have a blackjack, then the player wins
-        this.balance += (bet * 1.5)
+        this.balance += (bet * 1.5) + bet
         return
       }
     }
