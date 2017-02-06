@@ -1,13 +1,11 @@
 // Game of blackjack
 class Blackjack {
-  constructor (startingBalance, defaultBet, numOfDecks = 6,playLimit = 100) {
+  constructor (startingBalance, defaultBet, numOfDecks = 6, playLimit = 100) {
     // starts the game with a shuffle deck
     this.shoe = this.shuffleShoe(this.createShoe(numOfDecks))
     this.shoeIndex = 0 // position of next card drawn from show
     this.dealerHand = []
-    this.dealerCount = 0
     this.playerHand = []
-    this.playerCount = 0
     this.balance = startingBalance
     this.maxBalance = startingBalance
     this.defaultBet = defaultBet
@@ -46,9 +44,7 @@ class Blackjack {
   dealCards () {
     // resets players hands
     this.playerHand = []
-    this.playerCount = 0
     this.dealerHand = []
-    this.dealerCount = 0
 
     // check it shoe needs to be reshuffled
     if (this.shoeIndex >= 0.7 * this.shoe.length) {
@@ -59,16 +55,12 @@ class Blackjack {
 
     // deal cards one at a time starting at the player
     this.playerHand.push(this.shoe[this.shoeIndex])
-    this.playerCount += this.shoe[this.shoeIndex][1]
     this.shoeIndex++
     this.dealerHand.push(this.shoe[this.shoeIndex])
-    this.dealerCount += this.shoe[this.shoeIndex][1]
     this.shoeIndex++
     this.playerHand.push(this.shoe[this.shoeIndex])
-    this.playerCount += this.shoe[this.shoeIndex][1]
     this.shoeIndex++
     this.dealerHand.push(this.shoe[this.shoeIndex])
-    this.dealerCount += this.shoe[this.shoeIndex][1]
     this.shoeIndex++
   }
 
@@ -101,10 +93,7 @@ class Blackjack {
       this.balance = 0
     }
 
-      // deal cards
-
-
-      // check if player has a blackjack
+    // check if player has a blackjack
     if (this.isBlackjack(this.playerHand)) {
       if (this.isBlackjack(this.dealerHand)) {
         // if the dealer also has a blackjack then it's tie
@@ -117,12 +106,13 @@ class Blackjack {
       }
     }
 
-      // if the dealer has a blackjack
+    // if the dealer has a blackjack then the player loses
+    if (this.isBlackjack(this.dealerHand)) {
+      return
+    }
 
-      // check if dealer has a black jack
-        // player loses
-
-      // have player play hand based on dealers hand
+    // if blackjacks to not have an effect on round, then player should play
+    // hand based on what the dealer is showing
   }
 
   isBlackjack (hand) {
@@ -135,6 +125,41 @@ class Blackjack {
       return true
     } else {
       return false
+    }
+  }
+
+  hit (hand) {
+    // grabs next card in shoe and add it to the hand
+    var nextCard = this.shoe[this.shoeIndex]
+    this.shoeIndex++
+
+    // add card to hand
+    hand.push(nextCard)
+
+    // current hand count
+    var handCount = hand.reduce(function (sum, card) {
+      return sum + card[1]
+    }, 0)
+
+    // if hand count is over 21
+    if (handCount > 21) {
+      var containsAce = function (card) {
+        return card[1] === 11
+      }
+
+      // if hand contains an ace, turn the first ace into a 1 value
+      if (hand.some(containsAce)) {
+        for (var i = 0; i < hand.length; i++) {
+          if (hand[i][1] === 11) {
+            hand[i][1] = 1
+            break
+          }
+        }
+      } else {
+        // if hand is over 21, but does not have any aces counting as an 11
+        // then hand is considered bust
+        this.bust(hand)
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-/* global describe it */
+/* eslint-env mocha */
 var expect = require('chai').expect
 var sinon = require('sinon')
 
@@ -314,7 +314,7 @@ describe('Blackjack', function () {
   describe('Play Round', function () {
     var game
 
-    beforeEach(function() {
+    beforeEach(function () {
       var Blackjack = require('./blackjack.js').Blackjack
       var startingBalance = 100
       var defaultBet = 10
@@ -333,7 +333,6 @@ describe('Blackjack', function () {
 
       // then player balance should increase by
       expect(game.balance).to.equal(game.maxBalance += game.defaultBet * 1.5)
-
     })
 
     it('should tie if both player and dealer have blackjack', function () {
@@ -348,7 +347,6 @@ describe('Blackjack', function () {
 
       // then player balance should remain the same
       expect(game.balance).to.equal(game.maxBalance)
-
     })
 
     it('should player lose if dealer has blackjack', function () {
@@ -365,7 +363,7 @@ describe('Blackjack', function () {
       expect(game.balance).to.equal(game.maxBalance - game.defaultBet)
     })
 
-    it ('should calculate bet amout', function () {
+    it('should calculate bet amout', function () {
       // when the hands were dealt so player would lose
       game.playerHand = [['JC', 10], ['KC', 10]]
       game.dealerHand = [['JS', 10], ['AS', 11]]
@@ -395,12 +393,11 @@ describe('Blackjack', function () {
       expect(game.maxBalance - game.balance).to.equal(
         previousLost + game.maxBalance - balanceBeforeRound + game.defaultBet
       )
-
     })
 
-    it ('should recalculate max balance', function () {
+    it('should recalculate max balance', function () {
       // before playing grab starting balance
-      startingBalance = game.balance
+      var startingBalance = game.balance
 
       // when the hands were dealt so player would win a blackjack
       game.playerHand = [['JC', 10], ['AC', 11]]
